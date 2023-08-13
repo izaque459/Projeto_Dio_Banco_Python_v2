@@ -120,10 +120,17 @@ def main():
         opcao = menu()
 
         if opcao == "d":
-            valor = float(input("Informe o valor do depósito: "))
+            # realiza deposito somente se cpf de ususario existir em usuarios
+            cpf_usuario = input("informe cpf de usuario cadastrado: ")
+            if filtrar_usuario(cpf_usuario,usuarios):
+                extrato = extrato_usuario[cpf_usuario]
+                valor = float(input("Informe o valor do depósito: "))
 
-            saldo, extrato = depositar(saldo, valor, extrato)
-
+                saldo, extrato = depositar(saldo, valor, extrato)
+                extrato_usuario[cpf_usuario] = extrato
+                extrato =""
+            else:
+                print("CPF ou usuario não valido!")
         elif opcao == "s":
             valor = float(input("Informe o valor do saque: "))
 
@@ -141,7 +148,7 @@ def main():
 
         elif opcao == "nu":
             criar_usuario(usuarios)
-            # atualiza extrato de usuario com o cpf do ultimo inserido
+            # atualiza  a chave de extrato de usuario com o cpf do ultimo inserido e valor vazio
             extrato_usuario[usuarios[-1]["cpf"]] = ""
 
         elif opcao == "nc":
