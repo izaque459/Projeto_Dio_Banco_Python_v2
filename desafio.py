@@ -108,8 +108,10 @@ def main():
     AGENCIA = "0001"
 
     saldo = 0
+ #   saldo_usuario = {}
     limite = 500
     extrato = ""
+    extrato_usuario = {}
     numero_saques = 0
     usuarios = []
     contas = []
@@ -139,6 +141,8 @@ def main():
 
         elif opcao == "nu":
             criar_usuario(usuarios)
+            # atualiza extrato de usuario com o cpf do ultimo inserido
+            extrato_usuario[usuarios[-1]["cpf"]] = ""
 
         elif opcao == "nc":
             numero_conta = len(contas) + 1
