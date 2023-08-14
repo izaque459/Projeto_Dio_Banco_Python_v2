@@ -108,7 +108,7 @@ def main():
     AGENCIA = "0001"
 
     saldo = 0
- #   saldo_usuario = {}
+    saldo_usuario = {}
     limite = 500
     extrato = ""
     extrato_usuario = {}
@@ -122,19 +122,33 @@ def main():
         if opcao == "d":
             # realiza deposito somente se cpf de ususario existir em usuarios
             cpf_usuario = input("informe cpf de usuario cadastrado: ")
+            
             if filtrar_usuario(cpf_usuario,usuarios):
                 extrato = extrato_usuario[cpf_usuario]
+                saldo = saldo_usuario[cpf_usuario]
+                
                 valor = float(input("Informe o valor do depósito: "))
 
                 saldo, extrato = depositar(saldo, valor, extrato)
                 extrato_usuario[cpf_usuario] = extrato
-                extrato =""
+                saldo_usuario[cpf_usuario] = saldo
+                
+                extrato = ""
+                saldo = 0
             else:
                 print("CPF ou usuario não valido!")
+                
         elif opcao == "s":
-            valor = float(input("Informe o valor do saque: "))
+            # realiza saque somente se cpf de ususario existir em usuarios
+            cpf_usuario = input("informe cpf de usuario cadastrado: ")
+            
+            if filtrar_usuario(cpf_usuario,usuarios):
+                extrato = extrato_usuario[cpf_usuario]
+                saldo = saldo_usuario[cpf_usuario]
+                
+                valor = float(input("Informe o valor do saque: "))
 
-            saldo, extrato = sacar(
+                saldo, extrato = sacar(
                 saldo=saldo,
                 valor=valor,
                 extrato=extrato,
@@ -143,13 +157,35 @@ def main():
                 limite_saques=LIMITE_SAQUES,
             )
 
+                extrato_usuario[cpf_usuario] = extrato
+                saldo_usuario[cpf_usuario] = saldo
+                
+                extrato = "" 
+                saldo = 0
+            else:
+                print("CPF ou usuario não valido!")
+            
+            
         elif opcao == "e":
-            exibir_extrato(saldo, extrato=extrato)
+        
+            cpf_usuario = input("informe cpf de usuario cadastrado: ")
+            
+            if filtrar_usuario(cpf_usuario,usuarios):
+                extrato = extrato_usuario[cpf_usuario]
+                saldo = saldo_usuario[cpf_usuario]
+                
+                exibir_extrato(saldo, extrato=extrato)
+                
+                extrato = "" 
+                saldo = 0
+            else:
+                print("CPF ou usuario não valido!")
 
         elif opcao == "nu":
             criar_usuario(usuarios)
             # atualiza  a chave de extrato de usuario com o cpf do ultimo inserido e valor vazio
             extrato_usuario[usuarios[-1]["cpf"]] = ""
+            saldo_usuario[usuarios[-1]["cpf"]] = 0
 
         elif opcao == "nc":
             numero_conta = len(contas) + 1
